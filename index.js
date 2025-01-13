@@ -32,11 +32,18 @@ async function run() {
     await client.connect();
     const database=client.db('bistroDB');
     const menu=database.collection('menu');
+    const reviews=database.collection('reviews');
 
 
     //getting menu
     app.get('/menu',async (req,res)=>{
       const result=await menu.find().toArray();
+      res.send(result);
+    })
+
+    //getting reviews
+    app.get('/reviews',async (req,res)=>{
+      const result=await reviews.find().toArray();
       res.send(result);
     })
 

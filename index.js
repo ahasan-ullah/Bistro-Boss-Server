@@ -57,7 +57,7 @@ async function run() {
     })
 
     app.get('/cart',async (req,res)=>{
-      const result=await cart.insertOne(cartItem);
+      const result=await cart.find().toArray();
       res.send(result);
     })
 

@@ -41,7 +41,7 @@ async function run() {
     app.post('/users',async (req,res)=>{
       const user=req.body;
       const result=await users.insertOne(user);
-      res.send(resuklt);
+      res.send(result);
     })
 
     //getting menu

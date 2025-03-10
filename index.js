@@ -34,7 +34,15 @@ async function run() {
     const menu=database.collection('menu');
     const reviews=database.collection('reviews');
     const cart=database.collection('cart');
+    const users=database.collection('users');
 
+
+    //users api
+    app.post('/users',async (req,res)=>{
+      const user=req.body;
+      const result=await users.insertOne(user);
+      res.send(resuklt);
+    })
 
     //getting menu
     app.get('/menu',async (req,res)=>{

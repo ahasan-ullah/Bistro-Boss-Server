@@ -62,6 +62,18 @@ async function run() {
       res.send(result);
     })
 
+    app.patch('/users/admin/:id',async(req,res)=>{
+      const id=req.params.id;
+      const filter={_id: new ObjectId(id)};
+      const updatedDoc={
+        $set:{
+          role: 'admin'
+        }
+      }
+      const result=await users.updateOne(filter,updatedDoc);
+      res.send(result);
+    })
+
     //getting menu
     app.get('/menu',async (req,res)=>{
       const result=await menu.find().toArray();

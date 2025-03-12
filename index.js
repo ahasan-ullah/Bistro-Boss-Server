@@ -1,6 +1,7 @@
 const express=require('express');
 const app=express();
 const cors=require('cors');
+const jwt=require('jsonwebtoken');
 require('dotenv').config();
 const port=process.env.PORT||5000;
 
@@ -11,6 +12,13 @@ app.use(express.json());
 app.get('/',(req,res)=>{
   res.send('boss is sitting')
 });
+
+// jwt related api
+app.post('/jwt', async(req,res)=>{
+  const data=req.body;
+  const token=jwt.sign(data,process.env.ACCESS_TOKEN_SECRET,{expiresIn: '1h'});
+  res.send({token});
+})
 
 
 

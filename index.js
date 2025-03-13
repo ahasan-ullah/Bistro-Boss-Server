@@ -89,7 +89,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/users/admin/:email", verifyToken, verifyAdmin,async (req, res) => {
+    app.get("/users/admin/:email", verifyToken,async (req, res) => {
       const email = req.params.email;
       if (email !== req.decoded.email) {
         return res.status(403).send({ message: "unauthorized access" });
@@ -135,13 +135,13 @@ async function run() {
     });
 
     //cart collection
-    app.post("/cart", async (req, res) => {
+    app.post("/cart",verifyToken, async (req, res) => {
       const cartItem = req.body;
       const result = await cart.insertOne(cartItem);
       res.send(result);
     });
 
-    app.get("/cart", async (req, res) => {
+    app.get("/cart",verifyToken, async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
       const result = await cart.find(query).toArray();

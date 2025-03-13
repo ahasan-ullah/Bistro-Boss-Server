@@ -103,14 +103,14 @@ async function run() {
       res.send({ isAdmin });
     });
 
-    app.delete("/users/:id",verifyAdmin, async (req, res) => {
+    app.delete("/users/:id",verifyToken,verifyAdmin, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await users.deleteOne(query);
       res.send(result);
     });
 
-    app.patch("/users/admin/:id",verifyAdmin, async (req, res) => {
+    app.patch("/users/admin/:id",verifyToken,verifyAdmin, async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const updatedDoc = {

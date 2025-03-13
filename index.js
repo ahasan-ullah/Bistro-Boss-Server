@@ -20,6 +20,20 @@ app.post('/jwt', async(req,res)=>{
   res.send({token});
 })
 
+//verify token middleware
+const verifyToken=(req,res,next)=>{
+  if(!req.headers.authorization){
+    return res.status(401).send({message: 'access forbidden'});
+  }
+  const token=req.headers.authorization.split(' ')[1];
+  jwt.verify(token,process.env.ACCESS_TOKEN_SECRET, (err,decoded)=>{
+    if(err){
+      return res.status(401).send({message: 'access forbidden'});
+    }
+    req.decoded=decoded;
+    next();
+  })
+}
 
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -58,7 +72,7 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/users', async (req,res)=>{
+    app.get('/users',verifyToken, async (req,res)=>{
       const result= await users.find().toArray();
       res.send(result);
     })

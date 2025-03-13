@@ -77,6 +77,20 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/users/admin/:email',verifyToken,async(req,res)=>{
+      const email=req.params.email;
+      if(email!==req.decoded.email){
+        return res.status(403).send({message: 'unauthorized access'})
+      }
+      const query={email: email};
+      const user=await users.findOne(query);
+      let isAdmin=false;
+      if(user){
+        isAdmin=user?.role==='admin';
+      }
+      res.send({isAdmin});
+    })
+
     app.delete('/users/:id',async (req,res)=>{
       const id =req.params.id;
       const query={_id: new ObjectId(id)};

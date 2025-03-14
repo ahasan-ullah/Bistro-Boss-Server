@@ -128,6 +128,12 @@ async function run() {
       res.send(result);
     });
 
+    app.post('/menu',async(req,res)=>{
+      const item=req.body;
+      const result=await menu.insertOne(item);
+      res.send(result);
+    })
+
     //getting reviews
     app.get("/reviews", async (req, res) => {
       const result = await reviews.find().toArray();
@@ -135,13 +141,13 @@ async function run() {
     });
 
     //cart collection
-    app.post("/cart",verifyToken, async (req, res) => {
+    app.post("/cart", async (req, res) => {
       const cartItem = req.body;
       const result = await cart.insertOne(cartItem);
       res.send(result);
     });
 
-    app.get("/cart",verifyToken, async (req, res) => {
+    app.get("/cart", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
       const result = await cart.find(query).toArray();

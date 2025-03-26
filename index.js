@@ -136,6 +136,23 @@ async function run() {
       res.send(result);
     });
 
+    app.patch('/menu/:id',async(req,res)=>{
+      const item=req.body;
+      const id=req.params.id;
+      const filter={_id: new ObjectId(id)};
+      const updatedDoc={
+        $set: {
+          name: item.name,
+          category: item.category,
+          price: item.price,
+          recipe: item.recipe,
+          image: item.image
+        }
+      }
+      const result=await menu.updateOne(filter,updatedDoc);
+      res.send(result);
+    })
+
 
     app.post('/menu',verifyToken,verifyAdmin,async(req,res)=>{
       const item=req.body;

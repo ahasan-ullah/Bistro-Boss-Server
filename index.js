@@ -128,6 +128,16 @@ async function run() {
       res.send(result);
     });
 
+
+    app.get("/menu/:id", async (req, res) => {
+      const id=req.params.id;
+      const query={_id: new ObjectId(id)};
+      console.log(id)
+      const result = await menu.findOne(query);
+      res.send(result);
+    });
+
+
     app.post('/menu',verifyToken,verifyAdmin,async(req,res)=>{
       const item=req.body;
       const result=await menu.insertOne(item);

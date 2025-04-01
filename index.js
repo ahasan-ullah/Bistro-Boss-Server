@@ -59,6 +59,7 @@ async function run() {
     const reviews = database.collection("reviews");
     const cart = database.collection("cart");
     const users = database.collection("users");
+    const payments=database.collection("payments");
 
     //users api
     app.post("/users", async (req, res) => {
@@ -207,6 +208,17 @@ async function run() {
       res.send({
         clientSecret: paymentIntent.client_secret
       });
+    })
+
+    app.post('/payments',async(req,res)=>{
+      const payment=req.body;
+      const paymentResult=await payments.insertOne(payment);
+      const query={_id: {
+        $in: payment.cartId.map(id=>new ObjectId(id))
+      }};
+      const deleteResult=await cart.deleteMany(query)
+      
+      res.send({paymentResult,deleteResult});
     })
 
     // Send a ping to confirm a successful connection

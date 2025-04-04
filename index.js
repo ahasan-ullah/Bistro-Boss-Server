@@ -232,12 +232,21 @@ async function run() {
     })
 
     //stats
-    app.get('/admin-stats',async(req,res)=>{
+    app.get('/admin-stats',verifyToken,verifyAdmin,async(req,res)=>{
       const user=await users.estimatedDocumentCount();
       const menuItems=await menu.estimatedDocumentCount();
       const order=await payments.estimatedDocumentCount();
-      const payment=await payments.find().toArray();
-      const revenue=payment.reduce((total,payment)=>total+payment.price,0);
+      // const payment=await payments.find().toArray();
+      // const revenue=payment.reduce((total,payment)=>total+payment.price,0);
+      const result=await payments.aggregate([{
+        $group:{
+          _id: null,
+          totalRevenue:{
+            $sum: '$price'
+          } 
+        }
+      }]).toArray();
+      const revenue=result.length>0?result[0].totalRevenue:0;
       res.send({
         user,
         menuItems,

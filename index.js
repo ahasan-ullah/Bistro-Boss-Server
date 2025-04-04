@@ -231,6 +231,21 @@ async function run() {
       res.send(result)
     })
 
+    //stats
+    app.get('/admin-stats',async(req,res)=>{
+      const user=await users.estimatedDocumentCount();
+      const menuItems=await menu.estimatedDocumentCount();
+      const order=await payments.estimatedDocumentCount();
+      const payment=await payments.find().toArray();
+      const revenue=payment.reduce((total,payment)=>total+payment.price,0);
+      res.send({
+        user,
+        menuItems,
+        order,
+        revenue
+      })
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(

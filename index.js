@@ -256,7 +256,7 @@ async function run() {
     })
 
     //using aggregate pipeline
-    app.get('/admin-stats',async(req,res)=>{
+    app.get('/admin-stats',verifyToken,verifyAdmin,async(req,res)=>{
       const result=await payments.aggregate([
         {
           $unwind: '$menuId'
